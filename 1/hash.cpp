@@ -21,12 +21,13 @@ int hashTable::insert(const std::string &key, void *pv){
   if(contains(key)){
     return 1;
   }
-
+  //cout << "INSERT\n";
   int pos = hash(key) % capacity;
 
   // Collision Detection (Linear Probing)
   while(data[pos].isOccupied){
     pos = (pos + 1) % capacity;
+    //cout << "COLLISION\n";
   }
 
   data[pos].pv = pv;
@@ -86,15 +87,17 @@ bool hashTable::remove(const std::string &key){
   return false;
 }
 
-int hashTable::hash(const std::string &key){
+unsigned int hashTable::hash(const std::string &key){
   //Referred to djb2 Hash Algorithm
-  int hash = 5381;
+  unsigned int hash = 0;
   const char *c = key.c_str();
 
   while (*c++){
-    hash = ((hash << 5) + hash) + (int)*c;
+    //hash = ((hash << 5) + hash) + (int)*c;
+    hash = hash * 101 + *c;
   }
-  return true;
+  cout << hash << endl;
+  return hash;
 }
 
 int hashTable::findPos(const std::string &key){
@@ -124,7 +127,7 @@ int hashTable::findPos(const std::string &key){
 
 bool hashTable::rehash(){
   vector<hashItem> tmp = data;
-  int oldCapacity = this->capacity;
+  int oldCapacity = capacity;
   //Reset HashTable
   for(int i = 0; i < capacity; i++){
     data[i].isOccupied = false;
