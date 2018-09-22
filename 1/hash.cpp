@@ -87,14 +87,14 @@ bool hashTable::remove(const std::string &key){
   return false;
 }
 
-unsigned int hashTable::hash(const std::string &key){
+unsigned long hashTable::hash(const std::string &key){
   //Referred to djb2 Hash Algorithm
-  unsigned int hash = 0;
+  unsigned long hash = 5831;
   const char *c = key.c_str();
 
   while (*c++){
-    //hash = ((hash << 5) + hash) + (int)*c;
-    hash = hash * 101 + *c;
+    hash = ((hash << 5) + hash) + (int)*c;
+    //hash = hash * 101 + *c;
   }
   //cout << hash << endl;
   return hash;

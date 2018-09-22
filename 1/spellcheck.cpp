@@ -17,7 +17,7 @@ bool skip, output;
 
 int main(){
 
-  hashTable *dictionary = new hashTable(5000);
+  hashTable *dictionary = new hashTable(1009);
 
   cout << "Enter name of dictionary: ";
   getline(cin, dictname);
