@@ -96,7 +96,7 @@ unsigned int hashTable::hash(const std::string &key){
     //hash = ((hash << 5) + hash) + (int)*c;
     hash = hash * 101 + *c;
   }
-  cout << hash << endl;
+  //cout << hash << endl;
   return hash;
 }
 
