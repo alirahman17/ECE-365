@@ -37,8 +37,8 @@ int main(){
       //Adding Word to HashTable
       dictionary->insert(word, NULL);
   }
-
   clock_t t2 = clock();
+  
   double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
 
   cout << "Total time (in seconds) to load dictionary: " << timeDiff << endl;
@@ -60,6 +60,8 @@ int main(){
     cout << "Error: Unable to open output file " << outputname << endl;
     return(-1);
   }
+
+  clock_t t3 =  clock();
 
   while(getline(infile, buf)){
     line++;
@@ -106,6 +108,10 @@ int main(){
       i++;
     }
   }
+
+  clock_t t4 = clock();
+  double timeRead = ((double) (t4 - t3)) / CLOCKS_PER_SEC;
+  cout << "Total time (in seconds) to check document: " << timeRead << endl;
 
   dict.close();
   infile.close();

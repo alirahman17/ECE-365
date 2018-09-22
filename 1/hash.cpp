@@ -10,11 +10,11 @@ hashTable::hashTable(int size){
   data.resize(capacity);
   filled = 0;
   //DEBUGGING: cerr << "Capacity = " << capacity << endl;
-
+/*
   for(int i = 0; i < capacity; i++){
     data[i].isOccupied = false;
     data[i].isDeleted = true;
-  }
+  }*/
 }
 
 int hashTable::insert(const std::string &key, void *pv){
