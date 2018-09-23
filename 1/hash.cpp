@@ -1,7 +1,5 @@
 #include "hash.h"
-// DEBUGGING PURPOSES:
-#include <iostream>
-// END DEBUGGING
+
 using namespace std;
 
 hashTable::hashTable(int size){
@@ -9,33 +7,28 @@ hashTable::hashTable(int size){
   capacity = getPrime(size*2);
   data.resize(capacity);
   filled = 0;
-  //DEBUGGING: cerr << "Capacity = " << capacity << endl;
-/*
-  for(int i = 0; i < capacity; i++){
-    data[i].isOccupied = false;
-    data[i].isDeleted = true;
-  }*/
 }
 
 int hashTable::insert(const std::string &key, void *pv){
   if(contains(key)){
+    //No need to enter values more than once
     return 1;
   }
-  //cout << "INSERT\n";
   int pos = hash(key) % capacity;
 
   // Collision Detection (Linear Probing)
   while(data[pos].isOccupied){
     pos = (pos + 1) % capacity;
-    //cout << "COLLISION\n";
   }
 
+  // New HashItem Entry
   data[pos].pv = pv;
   data[pos].isOccupied = true;
   data[pos].isDeleted = false;
   data[pos].key = key;
   filled++;
 
+  // Size Check before Rehashing
   if(capacity / 2 < filled){
     rehash();
   }
@@ -44,6 +37,7 @@ int hashTable::insert(const std::string &key, void *pv){
 }
 
 bool hashTable::contains(const std::string &key){
+  //Checks if findPos returns a value corresponding to a key
   if(findPos(key) != -1){
     return true;
   } else{
@@ -52,8 +46,8 @@ bool hashTable::contains(const std::string &key){
 }
 
 void *hashTable::getPointer(const std::string &key, bool *b){
-  int pos = this->findPos(key);
-  if(this->contains(key)){
+  int pos = findPos(key);
+  if(pos != -1){
     if(b != nullptr){
       *b = true;
     }
@@ -68,8 +62,8 @@ void *hashTable::getPointer(const std::string &key, bool *b){
 }
 
 int hashTable::setPointer(const std::string &key, void *pv){
-  int pos = this->findPos(key);
-  if(this->contains(key)){
+  int pos = findPos(key);
+  if(pos != -1){
     data[pos].pv = pv;
     return 0;
   }
@@ -79,8 +73,8 @@ int hashTable::setPointer(const std::string &key, void *pv){
 }
 
 bool hashTable::remove(const std::string &key){
-  int pos;
-  if((pos = findPos(key)) != -1){
+  int pos = findPos(key);
+  if(pos != -1){
     data[pos].isDeleted = true;
     return true;
   }
@@ -94,35 +88,34 @@ unsigned long hashTable::hash(const std::string &key){
 
   while (*c++){
     hash = ((hash << 5) + hash) + (int)*c;
-    //hash = hash * 101 + *c;
   }
-  //cout << hash << endl;
   return hash;
 }
 
 int hashTable::findPos(const std::string &key){
+  //pos used to start at current index
   int pos = hash(key) % capacity;
-  int pos1 = pos;
-  int pos2 = 0;
 
-  while(pos1 < capacity && data[pos1].isOccupied && data[pos1].key.compare(key)){
-    pos1++;
+  while(pos < capacity && data[pos].isOccupied && data[pos].key.compare(key)){
+    pos++;
   }
-  if(pos1 == capacity){
-    while(data[pos].isOccupied && data[pos2].key.compare(key)){
-      pos2++;
-    }
+  if(pos < capacity && data[pos].isOccupied && !data[pos].key.compare(key) && !data[pos].isDeleted){
+    return pos;
   }
 
-  if(pos1 < capacity && data[pos1].isOccupied && !data[pos1].key.compare(key) && !data[pos1].isDeleted){
-    return pos1;
+  //pos loops back to beginning due to linear probing
+  if(pos == capacity){
+    pos = 0;
   }
-	else if(data[pos].isOccupied && !data[pos2].key.compare(key) && !data[pos2].isDeleted){
-    return pos2;
+  while(pos < capacity && data[pos].isOccupied && data[pos].key.compare(key)){
+    pos++;
   }
-	else{
-    return -1;
+	if(data[pos].isOccupied && !data[pos].key.compare(key) && !data[pos].isDeleted){
+    return pos;
   }
+
+  return -1;
+
 }
 
 bool hashTable::rehash(){
@@ -147,18 +140,24 @@ bool hashTable::rehash(){
       insert(tmp[i].key, tmp[i].pv);
     }
   }
+  //Clear Vector to avoid memory leaks
   vector<hashItem>().swap(tmp);
   return true;
 
 }
 
 unsigned int hashTable::getPrime(int size){
-    unsigned int prime[] = {1543, 3079, 6151, 12289, 24593, 49157, 49157, 98317, 196613, 393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 100663319};
+    unsigned int prime[] = {1543, 3079, 6151, 12289, 24593, 49157, 98317, 196613, 393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 100663319, 201326611, 402653189,805306457, 1610612741, 3221225533};
     int num = 0;
-
+    /*
+    if(size > 3221225533){
+      // Error Check
+      cout << "Size of Inputs is too Large for unsigned int" << endl;
+      return -1;
+    }
+    */
     while(prime[num] < size){
       num++;
     }
-    // DEBUGGING: cout << prime[num];
     return prime[num];
 }

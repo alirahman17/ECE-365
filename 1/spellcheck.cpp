@@ -30,6 +30,7 @@ int main(){
 
   //Begin Clock for Dictionary
   clock_t t1 = clock();
+
   //Adding Dictionary Words to HashTable
   while(dict >> word){
       //Lowercase Conversion
@@ -61,14 +62,15 @@ int main(){
     return(-1);
   }
 
+  //Begin Clock for Reading Input
   clock_t t3 =  clock();
 
   while(getline(infile, buf)){
     line++;
-    // Reset Word
+    //Reset Word
     word.clear();
     wordlen = 0;
-
+    //Reset Variables for new line
     linelen = buf.size();
     i = 0;
     skip = false;
@@ -102,9 +104,11 @@ int main(){
             outfile << "Unknown word at line " << line << ": " << word << endl;
           }
         }
+        //Ckearing word to avoid overlap with next line
         word.clear();
         wordlen = 0;
       }
+      // Move to next Line
       i++;
     }
   }
