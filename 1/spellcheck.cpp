@@ -77,24 +77,29 @@ int main(){
     output = false;
 
     while(i <= linelen){
+      //Checking Each Character Until Invalid Character Appears
       if(isalnum(buf[i]) || buf[i] == '\'' || buf[i] == '-'){
         if(isdigit(buf[i])){
+          //Skipping Words with Numbers
             skip = true;
         }
         if(++wordlen <= 20){
           word += buf[i];
         }
         else {
+          //Word Length Greater than 20
           if(!output){
             transform(word.begin(), word.end(), word.begin(), ::tolower);
             outfile << "Long word at line " << line << ", starts: " << word << endl;
             output = true;
           }
           skip = true;
+          //Continue until end of word
         }
       }
       else {
         if(skip){
+          //No output
           skip = false;
           output = false;
         }
@@ -104,7 +109,7 @@ int main(){
             outfile << "Unknown word at line " << line << ": " << word << endl;
           }
         }
-        //Ckearing word to avoid overlap with next line
+        //Clearing word to avoid overlap with next word in same line
         word.clear();
         wordlen = 0;
       }

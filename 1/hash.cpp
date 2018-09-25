@@ -19,6 +19,7 @@ int hashTable::insert(const std::string &key, void *pv){
   // Collision Detection (Linear Probing)
   while(data[pos].isOccupied){
     pos = (pos + 1) % capacity;
+    //Divide By Capacity to avoid going outside bounds
   }
 
   // New HashItem Entry
@@ -28,9 +29,12 @@ int hashTable::insert(const std::string &key, void *pv){
   data[pos].key = key;
   filled++;
 
-  // Size Check before Rehashing
+  // Size Check in case of Rehashing
   if(capacity / 2 < filled){
-    rehash();
+    bool tmp = rehash();
+    if(tmp == false){
+      return 2;
+    }
   }
 
   return 0;
@@ -150,8 +154,8 @@ unsigned int hashTable::getPrime(int size){
     unsigned int prime[] = {1543, 3079, 6151, 12289, 24593, 49157, 98317, 196613, 393241, 786433, 1572869, 3145739, 6291469, 12582917, 25165843, 50331653, 100663319, 201326611, 402653189,805306457, 1610612741, 3221225533};
     int num = 0;
     /*
+    Error Checking Since Rehash Can't Return a Number twice 3221225533 (Max unsigned int = 4294967295)
     if(size > 3221225533){
-      // Error Check
       cout << "Size of Inputs is too Large for unsigned int" << endl;
       return -1;
     }
