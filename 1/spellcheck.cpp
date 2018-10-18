@@ -1,3 +1,15 @@
+/*
+Ali Rahman
+DSA II Coding Assignment 1
+This programming assignment contains a class used to define a HashTable
+which is separated into a header and source file.  These files are used in a
+separate file meant to spellcheck a document based on a dictionary file which is
+loaded into the hashtable. The program asks for input of the file names and
+checks the input file to see if there are any unknown words or any words that
+are longer than 20 characters.  The program will output any of these words in
+a separate file indicated by the user.
+*/
+
 #include "hash.h"
 #include <iostream>
 #include <sstream>
@@ -38,6 +50,7 @@ int main(){
       //Adding Word to HashTable
       dictionary->insert(word, NULL);
   }
+  //End Clock for Dictionary
   clock_t t2 = clock();
 
   double timeDiff = ((double) (t2 - t1)) / CLOCKS_PER_SEC;
@@ -77,7 +90,7 @@ int main(){
     output = false;
 
     while(i <= linelen){
-      //Checking Each Character Until Invalid Character Appears
+      //Checking Each Character Until Word Seperator Appears
       if(isalnum(buf[i]) || buf[i] == '\'' || buf[i] == '-'){
         if(isdigit(buf[i])){
           //Skipping Words with Numbers
@@ -94,10 +107,11 @@ int main(){
             output = true;
           }
           skip = true;
-          //Continue until end of word
+          //Continue until end of word Anyways To Avoid Error
         }
       }
       else {
+        //End of Word
         if(skip){
           //No output
           skip = false;
