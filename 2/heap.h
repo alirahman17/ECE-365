@@ -5,7 +5,7 @@
 #include <string>
 #include "hash.h"
 
-class Heap {
+class heap {
 
   public:
 

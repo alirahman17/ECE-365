@@ -18,7 +18,7 @@ int heap::insert(const std::string &id, int key, void *pv){
     tmp.key = key;
     tmp.pData = pv;
 
-    mapping->insert(id,pv);
+    mapping->insert(id,&data[filled]);
     data[++filled] = tmp;
     percolateUp(filled);
 
@@ -55,7 +55,7 @@ int heap::deleteMin(std::string *pId, int *pKey, void *ppData){
     if(pKey != nullptr)
       *pKey = data[1].key;
     if(ppData != nullptr)
-      *(void **)ppData = data[1].pv;
+      *(void **)ppData = data[1].pData;
 
     mapping->remove(data[1].id);
     data[1] = data[filled--];
@@ -75,7 +75,7 @@ int heap::remove(const std::string &id, int *pKey, void *ppData){
     if(pKey != nullptr)
       *pKey = tmp->key;
     if(ppData != nullptr)
-      *(void **)ppData = tmp->pv;
+      *(void **)ppData = tmp->pData;
 
     mapping->remove(id);
     int oldKey = tmp->key;
@@ -93,9 +93,38 @@ int heap::remove(const std::string &id, int *pKey, void *ppData){
 
 void heap::percolateUp(int posCur){
 
+  node tmp = data[posCur];
+	int parent = posCur/2;
+	while(posCur > 1 && (tmp.key) < (data[parent].key)){
+		data[posCur] = data[parent];
+		mapping->setPointer(data[posCur].id, &data[posCur]);
+		posCur = parent;
+		parent = posCur / 2;
+	}
+	data[posCur] = tmp;
+	mapping->setPointer(data[posCur].id, &data[posCur]);
+
 }
 
 void heap::percolateDown(int posCur){
+
+  node tmp = data[posCur];
+  int child = 0;
+
+  while(posCur *2 <= filled){
+    child = posCur * 2;
+    if(child < filled && data[child + 1].key < data[child].key)
+      ++child;
+    if(data[child].key < tmp.key){
+      data[posCur] = data[child];
+      mapping->setPointer(data[posCur].id, &data[posCur]);
+    } else
+      break;
+    posCur = child;
+  }
+
+  data[posCur] = tmp;
+	mapping->setPointer(data[posCur].id, &data[posCur]);
 
 }
 
