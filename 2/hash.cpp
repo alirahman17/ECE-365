@@ -17,7 +17,7 @@ int hashTable::insert(const std::string &key, void *pv){
   int pos = hash(key) % capacity;
 
   // Collision Detection (Linear Probing)
-  while(data[pos].isOccupied){
+  while(data[pos].isOccupied && !data[pos].isDeleted){
     pos = (pos + 1) % capacity;
     //Divide By Capacity to avoid going outside bounds
   }
