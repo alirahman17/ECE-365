@@ -1,3 +1,16 @@
+/*
+Ali Rahman
+DSA II Coding Assignment 3
+This programming assignment contains a class used to define a graph which is
+separated into a header and source file which are based on a previous
+implementation of a hashTable and a binary heap.  These files are used in this
+program which executes Dijkstra's algorithm to find the shortest cost path to
+all nodes in a graph.  The program prompts the user for a a text file that is
+formatted with vertices that are connected with a cost, and a starting vertex
+for Dijkstra's algorithm.  The program records the system time used for the
+alogirthm to execute and reports the paths to a specified output file.
+*/
+
 #include "graph.h"
 #include <fstream>
 #include <string>
