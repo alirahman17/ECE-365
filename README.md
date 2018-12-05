@@ -11,4 +11,4 @@ A heap class implementation that relies on the hash table implementation from pr
 A graph class implementation that uses the heap and hash table implementations from projects 1 and 2.  This graph class includes a method to execute dijkstra's algorithm by finding the shortest cost path to each node of the graph from a specified starting graph.  This project also includes a program to demonstrate the functionality of dijkstra's algorithm by prompting the user for a graph that will have dijkstra's algorithm applied to it.
 
 ## Project 4: Dynamic Programming
-TBC
+An example of bottom-up dynamic programming based on a question from an ACM contest (http://acmgnyr.org/year1998/prob_g.html).  This program is designed to take two input strings and an output string which are used to determine if the two input strings are subsequences of the output string in order.  The program uses dynamic programming to achieve this and outputs the third string with capitalization to indicate the letters corresponding to the first string.
